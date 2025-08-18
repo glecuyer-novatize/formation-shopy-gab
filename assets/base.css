@@ -499,3 +499,8 @@ table td, table th {
 .disable-pointer-events {
   pointer-events: none;
 }
+
+/* Section-specific overrides */
+.section-basic-shop-metafield p {
+  max-width: none;
+}
