@@ -116,10 +116,6 @@
       "onboarding_title": "Article de blog",
       "onboarding_content": "Donnez à vos clients un résumé de votre article de blog"
     },
-    "basic_shop_metafield": {
-      "default_heading": "À propos de notre boutique",
-      "region_label": "Annonce de la boutique"
-    },
     "header": {
       "account": "Compte",
       "cart": "Panier",

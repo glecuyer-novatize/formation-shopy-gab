@@ -315,10 +315,6 @@
       "view_all": "View all",
       "onboarding_title": "Blog post",
       "onboarding_content": "Give your customers a summary of your blog post"
-    },
-    "basic_shop_metafield": {
-      "default_heading": "About our shop",
-      "region_label": "Shop announcement"
     }
   },
   "gift_cards": {
