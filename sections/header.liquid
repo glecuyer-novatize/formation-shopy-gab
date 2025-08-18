@@ -108,21 +108,6 @@
       <a href="{{ routes.cart_url }}">
         {{ 'sections.header.cart' | t }} <span id="CartBubble">{% unless cart == empty %}({{ cart.item_count }}){% endunless %}</span>
       </a>
-
-      {%- comment %} Language selector (header) {%- endcomment -%}
-      {%- if localization.available_languages.size > 1 -%}
-        {%- form 'localization' -%}
-          <label for="HeaderLanguageList">{{ 'general.localization.language.label' | t }}</label>
-          <select name="locale_code" id="HeaderLanguageList">
-            {%- for language in localization.available_languages -%}
-              <option value="{{ language.iso_code }}" lang="{{ language.iso_code }}" {%- if language.iso_code == localization.language.iso_code %} selected{% endif %}>
-                {{ language.endonym_name | capitalize }}
-              </option>
-            {%- endfor -%}
-          </select>
-          <button type="submit">{{ 'general.localization.language.update' | t }}</button>
-        {%- endform -%}
-      {%- endif -%}
     </div>
   </div>
 </header>
