@@ -1,0 +1,17 @@
+{
+  "input": {
+    "title": "Horizon Aurora Cap",
+    "descriptionHtml": "<p>Casquette test creee depuis Codex pour valider le flux Shopify Admin API. Une piece fictive inspiree des matins froids et des vitrines propres.</p>",
+    "vendor": "Codex Studio",
+    "productType": "Accessoire test",
+    "tags": ["codex-test", "horizon", "demo"],
+    "status": "ACTIVE"
+  },
+  "media": [
+    {
+      "alt": "Casquette noire minimaliste sur fond neutre",
+      "mediaContentType": "IMAGE",
+      "originalSource": "https://images.unsplash.com/photo-1521369909029-2afed882baee?auto=format&fit=crop&w=1200&q=80"
+    }
+  ]
+}

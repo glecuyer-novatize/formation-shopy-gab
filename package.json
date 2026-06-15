@@ -1,0 +1,43 @@
+{
+  "name": "alphred-test-shopify",
+  "version": "1.0.0",
+  "description": "Shopify Horizon theme development project.",
+  "main": "index.js",
+  "scripts": {
+    "pull": "shopify theme pull --nodelete --store glecuyer-formation.myshopify.com",
+    "push": "shopify theme push --nodelete --store glecuyer-formation.myshopify.com",
+    "dev": "shopify theme dev --store glecuyer-formation.myshopify.com --theme-editor-sync",
+    "dev:no-sync": "shopify theme dev --store glecuyer-formation.myshopify.com",
+    "pull:theme": "shopify theme pull --nodelete --store glecuyer-formation.myshopify.com",
+    "pull:live": "shopify theme pull --nodelete --live --store glecuyer-formation.myshopify.com",
+    "pull:dev": "shopify theme pull --nodelete --development --store glecuyer-formation.myshopify.com",
+    "pull:config:live": "shopify theme pull --nodelete --live --store glecuyer-formation.myshopify.com --only config/settings_data.json --only config/settings_schema.json --only templates/*.json",
+    "pull:config:dev": "shopify theme pull --nodelete --development --store glecuyer-formation.myshopify.com --only config/settings_data.json --only config/settings_schema.json --only templates/*.json",
+    "format": "npm run prettier -- --write",
+    "prettier": "prettier --ignore-path .gitignore \"**/(nova-)+*.+(js|jsx|json|yml|yaml|css|less|scss|ts|tsx|md|graphql|mdx|liquid)\" \"**/(icon-)+*.+(svg)\"",
+    "precommit": "lint-staged",
+    "prepare": "husky install",
+    "nova-set-project": "python3 set_project.py",
+    "nova:init": "npm run nova-set-project && shopify auth logout"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Novatize/alphred-test-shopify.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@shopify/prettier-plugin-liquid": "^1.6.3",
+    "eslint": "^8.28.0",
+    "eslint-config-prettier": "^8.5.0",
+    "husky": "^8.0.0",
+    "lint-staged": "^13.0.4",
+    "prettier": "^3.3.2",
+    "shopify-theme-tools": "^1.2.4"
+  },
+  "bugs": {
+    "url": "https://github.com/Novatize/alphred-test-shopify/issues"
+  },
+  "homepage": "https://github.com/Novatize/alphred-test-shopify#readme"
+}

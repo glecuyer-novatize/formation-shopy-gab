@@ -1,0 +1,22 @@
+query ReadCreatedProduct($handle: String!) {
+  productByHandle(handle: $handle) {
+    id
+    title
+    handle
+    status
+    totalInventory
+    featuredMedia {
+      alt
+      mediaContentType
+      status
+    }
+    variants(first: 5) {
+      nodes {
+        id
+        title
+        price
+        inventoryQuantity
+      }
+    }
+  }
+}
