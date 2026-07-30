@@ -1,0 +1,8 @@
+{
+  "name": "shopify-glecuyer",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "shopify theme dev --store glecuyer-test.myshopify.com --theme-editor-sync"
+  }
+}
