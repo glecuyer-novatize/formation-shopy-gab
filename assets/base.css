@@ -12,26 +12,6 @@ body {
   font-variation-settings: 'slnt' 0;
 }
 
-.theme-environment-badge {
-  position: fixed;
-  inset-block-end: 16px;
-  inset-inline-start: 16px;
-  z-index: 1000;
-  width: max-content;
-  max-width: calc(100vw - 32px);
-  padding: 8px 12px;
-  border: 1px solid rgb(255 255 255 / 70%);
-  border-radius: 6px;
-  background: rgb(18 18 18 / 88%);
-  color: #fff;
-  font-family: Arial, sans-serif;
-  font-size: 13px;
-  font-weight: 700;
-  line-height: 1.2;
-  box-shadow: 0 6px 18px rgb(0 0 0 / 18%);
-  pointer-events: none;
-}
-
 :root {
   --hover-lift-amount: 4px;
   --hover-scale-amount: 1.03;

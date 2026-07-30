@@ -61,27 +61,20 @@
       {% paginate collection.products by products_per_page %}
         {% capture children %}
           {% for product in collection.products %}
-            {% assign hide_private_sale_product = false %}
-            {% if collection.handle == 'all' and product.metafields.custom.vente_privee.value == true %}
-              {% assign hide_private_sale_product = true %}
-            {% endif %}
-
-            {% unless hide_private_sale_product %}
-              <li
-                id="{{ section.id }}-{{ product.id }}"
-                class="product-grid__item product-grid__item--{{ forloop.index0 }}"
-                data-page="{{ paginate.current_page }}"
-                data-product-id="{{ product.id }}"
-                ref="cards[]"
-              >
-                {% content_for 'block',
-                  type: '_product-card',
-                  id: 'product-card',
-                  closest.product: product,
-                  product_view_context: 'collection'
-                %}
-              </li>
-            {% endunless %}
+            <li
+              id="{{ section.id }}-{{ product.id }}"
+              class="product-grid__item product-grid__item--{{ forloop.index0 }}"
+              data-page="{{ paginate.current_page }}"
+              data-product-id="{{ product.id }}"
+              ref="cards[]"
+            >
+              {% content_for 'block',
+                type: '_product-card',
+                id: 'product-card',
+                closest.product: product,
+                product_view_context: 'collection'
+              %}
+            </li>
           {% endfor %}
         {% endcapture %}
 
