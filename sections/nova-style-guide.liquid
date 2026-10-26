@@ -1,0 +1,306 @@
+{% liquid
+  assign palette_tokens = 'background:background,foreground:foreground,color1:color1,color2:color2,color3:color3' | split: ','
+  assign type_tokens = 'h1:H1,h2:H2,h3:H3,h4:H4,h5:H5,h6:H6,paragraph:Body Default,body-large:Body Large,body-small:Body Small,body-xs:Body ExtraSmall' | split: ','
+%}
+
+<div class="nova-style-guide section section--page-width">
+  <header class="nova-style-guide__header">
+    <h1>{{ section.settings.heading }}</h1>
+    <p class="nova-style-guide__intro">
+      {{ section.settings.intro }}
+    </p>
+  </header>
+
+  <div class="nova-style-guide__layout">
+    <section class="nova-style-guide__panel" aria-labelledby="nova-style-guide-colors">
+      <div class="nova-style-guide__section-heading">
+        <p class="nova-style-guide__eyebrow">01</p>
+        <h2 id="nova-style-guide-colors" class="h3">Palette</h2>
+      </div>
+
+      <div class="nova-style-guide__swatches">
+        {% for token in palette_tokens %}
+          {% liquid
+            assign token_parts = token | split: ':'
+            assign token_key = token_parts[0]
+            assign token_label = token_parts[1]
+            assign swatch_color = settings.color_palette[token_key]
+          %}
+          {% if swatch_color != blank %}
+            <div class="nova-style-guide__swatch">
+              <span
+                class="nova-style-guide__swatch-preview"
+                style="--style-guide-swatch-color: {{ swatch_color }};"
+                aria-hidden="true"
+              ></span>
+              <span class="nova-style-guide__token-label">{{ token_label }}</span>
+              <code>{{ swatch_color }}</code>
+            </div>
+          {% endif %}
+        {% endfor %}
+      </div>
+    </section>
+
+    <section class="nova-style-guide__panel" aria-labelledby="nova-style-guide-type">
+      <div class="nova-style-guide__section-heading">
+        <p class="nova-style-guide__eyebrow">02</p>
+        <h2 id="nova-style-guide-type" class="h3">Typographie</h2>
+      </div>
+
+      <div class="nova-style-guide__type-list">
+        {% for token in type_tokens %}
+          {% liquid
+            assign token_parts = token | split: ':'
+            assign token_key = token_parts[0]
+            assign token_label = token_parts[1]
+          %}
+          <div class="nova-style-guide__type-row">
+            <div>
+              <p class="nova-style-guide__token-label">{{ token_label }}</p>
+              <code>var(--font-{{ token_key }}--size)</code>
+            </div>
+            {% if token_key == 'paragraph' %}
+              <p class="paragraph">Le texte courant utilise le preset body default du theme.</p>
+            {% else %}
+              <p class="{{ token_key }}">Apercu {{ token_label }}</p>
+            {% endif %}
+          </div>
+        {% endfor %}
+      </div>
+    </section>
+
+    <section class="nova-style-guide__panel" aria-labelledby="nova-style-guide-components">
+      <div class="nova-style-guide__section-heading">
+        <p class="nova-style-guide__eyebrow">03</p>
+        <h2 id="nova-style-guide-components" class="h3">Composants de base</h2>
+      </div>
+
+      <div class="nova-style-guide__component-grid">
+        <div class="nova-style-guide__component">
+          <p class="nova-style-guide__token-label">Boutons</p>
+          <div class="nova-style-guide__inline">
+            <a href="#MainContent" class="button">Primary dark</a>
+            <a href="#MainContent" class="button-light">Primary light</a>
+            <a href="#MainContent" class="button-secondary">Secondary dark</a>
+            <a href="#MainContent" class="button-secondary-light">Secondary light</a>
+            <a href="#MainContent" class="button-unstyled">Link</a>
+            <button class="button" type="button" disabled>Desactive</button>
+          </div>
+        </div>
+
+        <div class="nova-style-guide__component">
+          <p class="nova-style-guide__token-label">Formulaires</p>
+          <div class="nova-style-guide__form-preview">
+            <label for="StyleGuideEmail">Adresse courriel</label>
+            <input
+              id="StyleGuideEmail"
+              type="email"
+              name="style-guide-email"
+              placeholder="nom@exemple.com"
+              autocomplete="email"
+            >
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="nova-style-guide__panel" aria-labelledby="nova-style-guide-notes">
+      <div class="nova-style-guide__section-heading">
+        <p class="nova-style-guide__eyebrow">04</p>
+        <h2 id="nova-style-guide-notes" class="h3">References</h2>
+      </div>
+
+      <ul class="nova-style-guide__notes">
+        <li>Les couleurs proviennent de <code>settings.color_palette</code>.</li>
+        <li>Les styles H1 a H6 et body proviennent des presets typographiques du theme.</li>
+        <li>
+          Les presets Body Large, Body Small et Body ExtraSmall sont custom; ils doivent etre ajoutes aux schemas des
+          composants qui doivent les exposer dans leurs options de type.
+        </li>
+        <li>Les boutons et champs utilisent les variables globales du theme.</li>
+        <li>
+          Pour exposer les variantes Primary light et Secondary light dans un module bouton, ajouter manuellement
+          <code>button-light</code>
+          et
+          <code>button-secondary-light</code>
+          au dropdown de style du schema de la composante visee.
+        </li>
+        <li>{{ section.settings.reference_note }}</li>
+      </ul>
+    </section>
+  </div>
+</div>
+
+{% stylesheet %}
+  .nova-style-guide {
+    --style-guide-panel-padding: 1.5rem;
+    --style-guide-gap: 1rem;
+
+    padding-block: 4rem;
+  }
+
+  .nova-style-guide__header {
+    max-width: 48rem;
+    margin-block-end: 2.5rem;
+  }
+
+  .nova-style-guide__intro {
+    max-width: 40rem;
+    margin-block-start: 1rem;
+    color: rgb(var(--color-foreground-rgb) / var(--opacity-subdued-text));
+  }
+
+  .nova-style-guide__layout,
+  .nova-style-guide__type-list,
+  .nova-style-guide__component-grid,
+  .nova-style-guide__form-preview {
+    display: grid;
+    gap: var(--style-guide-gap);
+  }
+
+  .nova-style-guide__panel,
+  .nova-style-guide__component {
+    border: 1px solid rgb(var(--color-foreground-rgb) / var(--opacity-10-25));
+    border-radius: var(--style-border-radius, 0.25rem);
+    padding: var(--style-guide-panel-padding);
+    background: var(--color-background);
+  }
+
+  .nova-style-guide__section-heading {
+    display: grid;
+    gap: 0.25rem;
+    margin-block-end: 1.25rem;
+  }
+
+  .nova-style-guide__eyebrow,
+  .nova-style-guide__token-label {
+    margin: 0;
+    color: rgb(var(--color-foreground-rgb) / var(--opacity-muted-text));
+    font-family: var(--font-subheading--family);
+    font-size: var(--font-size--xs);
+    font-weight: var(--font-subheading--weight);
+    line-height: var(--line-height--body-normal);
+    text-transform: uppercase;
+  }
+
+  .nova-style-guide__swatches {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+    gap: 0.75rem;
+  }
+
+  .nova-style-guide__swatch {
+    display: grid;
+    gap: 0.5rem;
+    min-width: 0;
+  }
+
+  .nova-style-guide__swatch-preview {
+    display: block;
+    min-height: 5rem;
+    border: 1px solid rgb(var(--color-foreground-rgb) / var(--opacity-10-25));
+    border-radius: var(--style-border-radius, 0.25rem);
+    background: var(--style-guide-swatch-color);
+  }
+
+  .nova-style-guide code {
+    overflow-wrap: anywhere;
+    font-size: var(--font-size--xs);
+  }
+
+  .nova-style-guide__type-row {
+    display: grid;
+    grid-template-columns: minmax(9rem, 12rem) minmax(0, 1fr);
+    gap: 1rem;
+    align-items: baseline;
+    padding-block: 1rem;
+    border-block-start: 1px solid rgb(var(--color-foreground-rgb) / var(--opacity-10-25));
+  }
+
+  .nova-style-guide__type-row:first-child {
+    border-block-start: 0;
+    padding-block-start: 0;
+  }
+
+  .nova-style-guide__type-row > * {
+    min-width: 0;
+    margin: 0;
+  }
+
+  .nova-style-guide__component-grid {
+    grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+  }
+
+  .nova-style-guide__inline {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    align-items: center;
+    margin-block-start: 1rem;
+  }
+
+  .nova-style-guide__form-preview label {
+    font-size: var(--font-size--sm);
+  }
+
+  .nova-style-guide__form-preview input {
+    width: min(100%, 24rem);
+    min-height: 3rem;
+    border: var(--style-border-width-inputs) solid var(--color-input-border);
+    border-radius: var(--style-border-radius-inputs);
+    padding-inline: 1rem;
+    color: var(--color-input-text);
+  }
+
+  .nova-style-guide__notes {
+    display: grid;
+    gap: 0.75rem;
+    margin: 0;
+    padding-inline-start: 1.25rem;
+  }
+
+  @media screen and (max-width: 749px) {
+    .nova-style-guide {
+      --style-guide-panel-padding: 1rem;
+
+      padding-block: 2.5rem;
+    }
+
+    .nova-style-guide__type-row {
+      grid-template-columns: 1fr;
+      gap: 0.5rem;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "# Style guide",
+  "class": "section-wrapper",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Guide de style"
+    },
+    {
+      "type": "textarea",
+      "id": "intro",
+      "label": "Intro",
+      "default": "Reference de base pour verifier les couleurs, la typographie et les composants essentiels du theme."
+    },
+    {
+      "type": "textarea",
+      "id": "reference_note",
+      "label": "Reference note",
+      "default": "Ajouter ici les references Figma ou les notes de validation du design system."
+    }
+  ],
+  "presets": [
+    {
+      "name": "# Style guide"
+    }
+  ]
+}
+{% endschema %}

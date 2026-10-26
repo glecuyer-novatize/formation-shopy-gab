@@ -627,6 +627,45 @@ body,
   font-size: smaller;
 }
 
+.body-large:not(.button),
+.body-large > *,
+.text-block.body-large :is(h1, h2, h3, h4, h5, h6),
+.body-small:not(.button),
+.body-small > *,
+.text-block.body-small :is(h1, h2, h3, h4, h5, h6),
+.body-xs:not(.button),
+.body-xs > *,
+.text-block.body-xs :is(h1, h2, h3, h4, h5, h6) {
+  font-family: var(--font-paragraph--family);
+  font-style: var(--font-paragraph--style);
+  font-weight: var(--font-paragraph--weight);
+  text-transform: var(--font-paragraph--case);
+  -webkit-font-smoothing: antialiased;
+  color: var(--color, var(--color-foreground));
+}
+
+.body-large:not(.button),
+.body-large > *,
+.text-block.body-large :is(h1, h2, h3, h4, h5, h6) {
+  font-size: var(--font-body-large--size);
+  line-height: var(--font-body-large--line-height);
+}
+
+.body-small:not(.button),
+.body-small > *,
+.text-block.body-small :is(h1, h2, h3, h4, h5, h6) {
+  font-size: var(--font-body-small--size);
+  line-height: var(--font-body-small--line-height);
+}
+
+.body-xs:not(.button),
+.body-xs > *,
+.text-block.body-xs :is(h1, h2, h3, h4, h5, h6) {
+  font-size: var(--font-body-xs--size);
+  line-height: var(--font-body-xs--line-height);
+}
+
+
 /* Typography presets */
 
 h1,
@@ -809,6 +848,8 @@ summary::-webkit-details-marker {
 /* Buttons */
 .button,
 .button-secondary,
+.button-light,
+.button-secondary-light,
 .button-custom,
 button.shopify-payment-button__button--unbranded {
   --text-align: center;
@@ -837,20 +878,31 @@ button.shopify-payment-button__button--unbranded {
   padding-inline: var(--button-padding-inline);
 }
 
-.button {
+.button,
+.button-light {
   font-family: var(--button-font-family-primary);
   text-transform: var(--button-text-case-primary);
   border-radius: var(--style-border-radius-buttons-primary);
 }
 
-.button:not(.button-secondary, .button-unstyled) {
+.button-light {
+  border-radius: var(--style-border-radius-buttons-primary-light);
+}
+
+.button:not(.button-secondary, .button-unstyled),
+.button-light {
   outline-color: var(--button-focus-outline-color, var(--button-background-color));
 }
 
-.button-secondary {
+.button-secondary,
+.button-secondary-light {
   font-family: var(--button-font-family-secondary);
   text-transform: var(--button-text-case-secondary);
   border-radius: var(--style-border-radius-buttons-secondary);
+}
+
+.button-secondary-light {
+  border-radius: var(--style-border-radius-buttons-secondary-light);
 }
 
 button.shopify-payment-button__button--unbranded {
@@ -881,6 +933,8 @@ input:not(:placeholder-shown)::placeholder {
 
 .button[aria-disabled='true'],
 .button-secondary[aria-disabled='true'],
+.button-light[aria-disabled='true'],
+.button-secondary-light[aria-disabled='true'],
 .button:disabled {
   opacity: 0.5;
   cursor: not-allowed;
@@ -902,6 +956,20 @@ button.shopify-payment-button__button--unbranded:hover:not([disabled]) {
   --button-border-color: var(--color-primary-button-hover-border);
 }
 
+.button-light {
+  --button-color: var(--color-primary-button-light-text);
+  --button-background-color: var(--color-primary-button-light-background);
+  --button-border-color: var(--color-primary-button-light-border);
+  --button-border-width: var(--style-border-width-primary-light);
+  --button-focus-outline-color: var(--color-primary-button-light-background);
+}
+
+.button-light:hover {
+  --button-color: var(--color-primary-button-light-hover-text);
+  --button-background-color: var(--color-primary-button-light-hover-background);
+  --button-border-color: var(--color-primary-button-light-hover-border);
+}
+
 .button-secondary {
   --button-color: var(--color-secondary-button-text);
   --button-background-color: var(--color-secondary-button-background);
@@ -913,6 +981,19 @@ button.shopify-payment-button__button--unbranded:hover:not([disabled]) {
   --button-color: var(--color-secondary-button-hover-text);
   --button-background-color: var(--color-secondary-button-hover-background);
   --button-border-color: var(--color-secondary-button-hover-border);
+}
+
+.button-secondary-light {
+  --button-color: var(--color-secondary-button-light-text);
+  --button-background-color: var(--color-secondary-button-light-background);
+  --button-border-color: var(--color-secondary-button-light-border);
+  --button-border-width: var(--style-border-width-secondary-light);
+}
+
+.button-secondary-light:hover {
+  --button-color: var(--color-secondary-button-light-hover-text);
+  --button-background-color: var(--color-secondary-button-light-hover-background);
+  --button-border-color: var(--color-secondary-button-light-hover-border);
 }
 
 .button-custom {

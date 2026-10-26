@@ -238,7 +238,7 @@
 
     /* Typography presets */
     {% liquid
-      assign font_sizes = "paragraph, h1, h2, h3, h4, h5, h6" | split: ", "
+      assign font_sizes = "paragraph, body-large, body-small, body-xs, h1, h2, h3, h4, h5, h6" | split: ", "
       assign fluid_size_cutoff = 48
       assign absolute_font_size_min = 10
 
@@ -314,13 +314,26 @@
         endif
       endfor
 
-      assign type_presets = "paragraph, h1, h2, h3, h4, h5, h6" | split: ", "
+
+      echo '@media screen and (max-width: 749px) {'
+      for font_size in font_sizes
+        assign mobile_size_setting = 'type_size_[font_size]_mobile' | replace: '[font_size]', font_size
+        assign mobile_size_value = settings[mobile_size_setting] | times: 1
+
+        if mobile_size_value > 0
+          assign mobile_size_rem = mobile_size_value | divided_by: 16.0
+          echo '--font-size--[font_size]: [mobile_size_rem]rem;' | replace: '[font_size]', font_size | replace: '[mobile_size_rem]', mobile_size_rem
+        endif
+      endfor
+      echo '}'
+
+      assign type_presets = "paragraph, body-large, body-small, body-xs, h1, h2, h3, h4, h5, h6" | split: ", "
 
       for preset_name in type_presets
         assign preset_size = '--font-size--[preset_name]' | replace: '[preset_name]', preset_name
         assign preset_line_height = 'type_line_height_[preset_name]' | replace: '[preset_name]', preset_name
 
-        if preset_name == 'paragraph'
+        if preset_name == 'paragraph' or preset_name contains 'body-'
           assign preset_font = '--font-body--family'
           assign preset_style = '--font-body--style'
           assign preset_weight = '400'
@@ -453,9 +466,13 @@
     --style-border-radius-pills: {{ settings.pills_border_radius }}px;
     --style-border-radius-inputs: {{ settings.inputs_border_radius }}px;
     --style-border-radius-buttons-primary: {{ settings.button_border_radius_primary }}px;
+    --style-border-radius-buttons-primary-light: {{ settings.button_border_radius_primary_light }}px;
     --style-border-radius-buttons-secondary: {{ settings.button_border_radius_secondary }}px;
+    --style-border-radius-buttons-secondary-light: {{ settings.button_border_radius_secondary_light }}px;
     --style-border-width-primary: {{ settings.primary_button_border_width }}px;
+    --style-border-width-primary-light: {{ settings.primary_button_light_border_width }}px;
     --style-border-width-secondary: {{ settings.secondary_button_border_width }}px;
+    --style-border-width-secondary-light: {{ settings.secondary_button_light_border_width }}px;
     --style-border-width-inputs: {{ settings.input_border_width }}px;
     --style-border-radius-popover: {{ settings.popover_border_radius }}px;
     --style-border-popover: {{ settings.popover_border_width }}px solid {{ settings.popover_border_color }};
