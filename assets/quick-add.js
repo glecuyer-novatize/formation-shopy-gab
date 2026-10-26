@@ -67,9 +67,28 @@ export class QuickAddComponent extends Component {
     if (this.dataset.rendersBothButtons !== 'true') return;
 
     const productOptionsCount = this.dataset.productOptionsCount;
-    const quickAddButton = productOptionsCount === '1' ? 'add' : 'choose';
+    let quickAddButton = productOptionsCount === '1' ? 'add' : 'choose';
+
+    // A single-option card can resolve to an unavailable variant (e.g. re-selecting a
+    // sold-out swatch). Keep "Choose" so shoppers reach the picker, not a dead-end disabled "Add".
+    if (quickAddButton === 'add' && this.#isSelectedVariantUnavailable()) {
+      quickAddButton = 'choose';
+    }
+
     this.setAttribute('data-quick-add-button', quickAddButton);
   };
+
+  /**
+   * Whether the card's currently selected swatch maps to an unavailable variant.
+   * Reads `data-option-available` off the variant picker's selected option - the same
+   * signal the product card uses. Only reports true on an explicit `false`, so an
+   * unknown/absent signal leaves the caller's default ("add") untouched.
+   * @returns {boolean}
+   */
+  #isSelectedVariantUnavailable() {
+    const productCard = /** @type {import('./product-card').ProductCard | null} */ (this.closest('product-card'));
+    return productCard?.variantPicker?.selectedOption?.dataset.optionAvailable === 'false';
+  }
 
   /**
    * Clears the cached content when cart is updated
@@ -154,6 +173,7 @@ export class QuickAddComponent extends Component {
     if (!(dialogComponent instanceof QuickAddDialog)) return;
 
     this.#stayVisibleUntilDialogCloses(dialogComponent);
+    this.#syncHeaderState(dialogComponent);
 
     dialogComponent.showDialog();
 
@@ -163,6 +183,24 @@ export class QuickAddComponent extends Component {
     if (!dialog) return;
     dialog.addEventListener('animationstart', this.#resetScroll.bind(this), { once: true });
   };
+
+  /**
+   * Mirrors the header states that product media and details styles depend on. Those rules reach page
+   * content from `#header-group` with a sibling combinator, which can't reach this body-level dialog.
+   * Scroll is locked while the dialog is open, so the header can't change state until it closes.
+   *
+   * @param {QuickAddDialog} dialogComponent
+   */
+  #syncHeaderState(dialogComponent) {
+    dialogComponent.toggleAttribute(
+      'header-transparent',
+      document.querySelector('header-component[transparent]') !== null
+    );
+    dialogComponent.toggleAttribute(
+      'header-sticky-active',
+      document.querySelector("#header-group #header-component[data-sticky-state='active']") !== null
+    );
+  }
 
   #closeQuickAddModal = () => {
     const dialogComponent = document.getElementById('quick-add-dialog');

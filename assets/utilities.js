@@ -444,6 +444,25 @@ export function isTouchDevice() {
 }
 
 /**
+ * Checks whether an element resolves to right-to-left text direction.
+ * @param {Element} [element] - The element to check. Defaults to the document root.
+ * @returns {boolean} True if the element's computed direction is RTL.
+ */
+export function isRTL(element = document.documentElement) {
+  return getComputedStyle(element).direction === 'rtl';
+}
+
+/**
+ * Resolves the reading-direction multiplier for an element, used to convert
+ * physical horizontal input (arrow keys, pointer deltas) into logical movement.
+ * @param {Element} element - The element whose computed direction to read.
+ * @returns {1 | -1} `-1` when the element renders right-to-left, `1` otherwise.
+ */
+export function getDirectionMultiplier(element) {
+  return getComputedStyle(element).direction === 'rtl' ? -1 : 1;
+}
+
+/**
  * Clamps a number between a minimum and maximum value.
  * @param {number} value - The input number to clamp.
  * @param {number} min - The minimum value.
@@ -808,14 +827,14 @@ export function calculateHeaderGroupHeight(
   if (!headerGroup) return 0;
 
   let totalHeight = 0;
-  const children = headerGroup.children;
-  for (let i = 0; i < children.length; i++) {
-    const element = children[i];
-    if (element === header || !(element instanceof HTMLElement)) continue;
-    totalHeight += element.offsetHeight;
+  for (const element of headerGroup.children) {
+    if (element instanceof HTMLElement) totalHeight += element.offsetHeight;
   }
 
-  // If the header is transparent and has a sibling section, add the height of the header to the total height
+  // A transparent header is absolutely positioned, so the loop above counts its section
+  // wrapper as 0px. When a section follows it in the group, header.liquid pushes that
+  // section down by the header's height using a margin, which offsetHeight also
+  // excludes — so the header's height has to be added back manually.
   if (header instanceof HTMLElement && header.hasAttribute('transparent') && header.parentElement?.nextElementSibling) {
     return totalHeight + header.offsetHeight;
   }
@@ -830,13 +849,13 @@ export function calculateHeaderGroupHeight(
 function updateTransparentHeaderOffset() {
   const header = document.querySelector('#header-component');
   const headerGroup = document.querySelector('#header-group');
-  const hasHeaderSection = headerGroup?.querySelector('.header-section');
-  if (!hasHeaderSection || !header?.hasAttribute('transparent')) {
+  const headerSection = headerGroup?.querySelector('.header-section');
+  if (!headerSection || !header?.hasAttribute('transparent')) {
     document.body.style.setProperty('--transparent-header-offset-boolean', '0');
     return;
   }
 
-  const hasImmediateSection = hasHeaderSection.nextElementSibling?.classList.contains('shopify-section');
+  const hasImmediateSection = headerSection.nextElementSibling?.classList.contains('shopify-section');
 
   const shouldApplyOffset = !hasImmediateSection ? '1' : '0';
   document.body.style.setProperty('--transparent-header-offset-boolean', shouldApplyOffset);
@@ -861,7 +880,9 @@ function updateHeaderHeights() {
 
   if (headerTopRow) {
     window.requestAnimationFrame(function () {
-      header.style.setProperty('--top-row-height', `${headerTopRow.offsetHeight}px`);
+      // Must stay fractional: the underlays use this as a gradient stop, and a rounded value
+      // can land above the row's real bottom edge, painting a hairline under the header.
+      header.style.setProperty('--top-row-height', `${headerTopRow.getBoundingClientRect().height}px`);
     });
   }
 }
